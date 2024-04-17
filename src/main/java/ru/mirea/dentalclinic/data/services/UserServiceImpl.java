@@ -1,5 +1,6 @@
 package ru.mirea.dentalclinic.data.services;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,9 +23,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Result<UserEntity> create(UserEntity user) {
         if (repository.existsByUsername(user.getUsername())) {
-            return Result.failure(new UserExistException(UserExistException.USER_ALREADY_EXIST));
+            return Result.failure(new UserExistException());
         }
         return Result.success(save(user));
     }
