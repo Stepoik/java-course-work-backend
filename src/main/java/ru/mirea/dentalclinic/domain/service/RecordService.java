@@ -1,5 +1,9 @@
 package ru.mirea.dentalclinic.domain.service;
 
-public interface RecordService {
+import ru.mirea.dentalclinic.domain.models.Record;
 
+public interface RecordService {
+    Record createNewRecord(Record record);
+
+    Record bookRecord(Long recordId);
 }

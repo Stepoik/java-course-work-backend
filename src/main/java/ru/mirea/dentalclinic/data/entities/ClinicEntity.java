@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,4 +26,7 @@ public class ClinicEntity {
 
     @Column(name = "longitude")
     private Float longitude;
+
+    @ManyToMany(mappedBy = "clinics")
+    private List<ProcedureEntity> procedures;
 }

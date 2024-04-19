@@ -1,7 +1,7 @@
 package ru.mirea.dentalclinic.domain.models;
 
 public record Doctor(
-        Integer id,
+        Long id,
         String firstName,
         String lastName,
         String middleName,

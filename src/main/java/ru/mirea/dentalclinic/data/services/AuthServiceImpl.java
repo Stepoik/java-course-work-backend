@@ -11,7 +11,7 @@ import ru.mirea.dentalclinic.api.dtos.requests.UserDetailsRequest;
 import ru.mirea.dentalclinic.data.entities.UserEntity;
 import ru.mirea.dentalclinic.domain.service.AuthService;
 import ru.mirea.dentalclinic.domain.service.UserService;
-import ru.mirea.dentalclinic.utils.result.JwtService;
+import ru.mirea.dentalclinic.utils.JwtService;
 import ru.mirea.dentalclinic.utils.result.Result;
 
 @Service

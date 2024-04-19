@@ -15,8 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.mirea.dentalclinic.domain.service.UserService;
-import ru.mirea.dentalclinic.utils.result.JwtService;
+import ru.mirea.dentalclinic.utils.JwtService;
 
 import java.io.IOException;
 

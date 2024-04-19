@@ -1,29 +1,32 @@
 package ru.mirea.dentalclinic.data.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mirea.dentalclinic.data.entities.ProcedureEntity;
 import ru.mirea.dentalclinic.data.mappers.ClinicEntityMapper;
 import ru.mirea.dentalclinic.data.repositories.ClinicRepository;
+import ru.mirea.dentalclinic.data.repositories.ProcedureRepository;
 import ru.mirea.dentalclinic.domain.models.Clinic;
+import ru.mirea.dentalclinic.domain.models.Procedure;
 import ru.mirea.dentalclinic.domain.service.ClinicService;
+import ru.mirea.dentalclinic.domain.service.ProcedureService;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ClinicServiceImpl implements ClinicService {
     private final ClinicRepository clinicRepository;
-    private final ClinicEntityMapper clinicEntityMapper;
+    private final ProcedureService procedureService;
 
-    public ClinicServiceImpl(ClinicRepository clinicRepository, ClinicEntityMapper clinicEntityMapper) {
-        this.clinicRepository = clinicRepository;
-        this.clinicEntityMapper = clinicEntityMapper;
-    }
+
 
     @Override
     public List<Clinic> getClinics() {
         return clinicRepository
                 .findAll()
                 .stream()
-                .map(clinicEntityMapper::mapToDomain)
+                .map(ClinicEntityMapper::mapToDomain)
                 .toList();
     }
 
@@ -32,7 +35,7 @@ public class ClinicServiceImpl implements ClinicService {
         return clinicRepository
                 .findById(id)
                 .stream()
-                .map(clinicEntityMapper::mapToDomain)
+                .map(ClinicEntityMapper::mapToDomain)
                 .findFirst()
                 .orElse(null);
     }
@@ -40,5 +43,10 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     public List<Clinic> getClinicsByAddress(String query) {
         return null;
+    }
+
+    @Override
+    public List<Procedure> getProcedures(Long clinicId) {
+        return procedureService.getProceduresByClinicId(clinicId);
     }
 }

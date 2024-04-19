@@ -6,7 +6,7 @@ import ru.mirea.dentalclinic.domain.models.Clinic;
 
 @Component
 public class ClinicEntityMapper {
-    public Clinic mapToDomain(ClinicEntity clinic) {
+    public static Clinic mapToDomain(ClinicEntity clinic) {
         return new Clinic(
                 clinic.getId(),
                 clinic.getAddress(),

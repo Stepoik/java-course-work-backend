@@ -1,8 +1,7 @@
 package ru.mirea.dentalclinic.domain.models;
 
-public record Office(
+public record Procedure(
         Long id,
-        Integer number,
-        Clinic clinic
+        String name
 ) {
 }

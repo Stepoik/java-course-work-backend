@@ -1,14 +1,12 @@
 package ru.mirea.dentalclinic.api.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.mirea.dentalclinic.api.dtos.ClinicDto;
 import ru.mirea.dentalclinic.api.dtos.reponses.ClinicResponse;
+import ru.mirea.dentalclinic.api.dtos.reponses.ProceduresResponse;
 import ru.mirea.dentalclinic.api.mappers.ClinicMapper;
-import ru.mirea.dentalclinic.domain.models.Clinic;
+import ru.mirea.dentalclinic.api.mappers.ProcedureMapper;
+import ru.mirea.dentalclinic.domain.models.Procedure;
 import ru.mirea.dentalclinic.domain.service.ClinicService;
 
 import java.util.List;
@@ -17,12 +15,9 @@ import java.util.List;
 @RequestMapping("/clinic")
 public class ClinicController {
 
-    private final ClinicMapper clinicMapper;
-
     private final ClinicService clinicService;
 
-    public ClinicController(ClinicMapper clinicMapper, ClinicService clinicService) {
-        this.clinicMapper = clinicMapper;
+    public ClinicController(ClinicService clinicService) {
         this.clinicService = clinicService;
     }
 
@@ -30,10 +25,21 @@ public class ClinicController {
     @ResponseBody
     public ClinicResponse getClinics() {
         List<ClinicDto> clinics = clinicService.getClinics().stream().map(
-                clinicMapper::mapFromDomain
+                ClinicMapper::mapFromDomain
         ).toList();
         return new ClinicResponse(
                 clinics
+        );
+    }
+
+    @GetMapping("/{clinicId}/procedures")
+    public ProceduresResponse getClinicProcedures(@PathVariable("clinicId") Long clinicId) {
+        List<Procedure> procedures = clinicService.getProcedures(clinicId);
+        return new ProceduresResponse(
+                procedures
+                        .stream()
+                        .map(ProcedureMapper::mapFromDomain)
+                        .toList()
         );
     }
 }

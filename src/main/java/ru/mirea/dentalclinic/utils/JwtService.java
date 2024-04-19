@@ -1,4 +1,4 @@
-package ru.mirea.dentalclinic.utils.result;
+package ru.mirea.dentalclinic.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;

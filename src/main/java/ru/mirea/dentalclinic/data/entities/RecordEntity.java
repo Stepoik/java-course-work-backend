@@ -19,10 +19,10 @@ public class RecordEntity {
     private Long id;
 
     @Column(name = "start")
-    private Long start;
+    private Integer start;
 
     @Column(name = "finish")
-    private Long finish;
+    private Integer finish;
 
     @Column(name = "day")
     private Date date;
@@ -38,5 +38,13 @@ public class RecordEntity {
 
     @ManyToOne(optional = false)
     private OfficeEntity office;
+
+    public RecordEntity(Long id, Integer start, Integer finish, Date date, Boolean isBooked) {
+        this.id = id;
+        this.start = start;
+        this.finish = finish;
+        this.date = date;
+        this.isBooked = isBooked;
+    }
 
 }

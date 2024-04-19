@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -18,17 +20,29 @@ public class DoctorEntity {
     private Long id;
 
     @Column(name = "first_name")
-    String firstName;
+    private String firstName;
 
     @Column(name = "last_name")
-    String lastName;
+    private String lastName;
 
     @Column(name = "middle_name")
-    String middleName;
+    private String middleName;
 
     @Column(name = "spec")
-    String spec;
+    private String spec;
 
     @Column(name = "image")
-    String image;
+    private String image;
+
+    @ManyToMany(mappedBy = "doctors")
+    private List<ProcedureEntity> procedures;
+
+    public DoctorEntity(Long id, String firstName, String lastName, String middleName, String spec, String image) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.spec = spec;
+        this.image = image;
+    }
 }
