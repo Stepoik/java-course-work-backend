@@ -5,11 +5,12 @@ import ru.mirea.dentalclinic.data.entities.RecordEntity;
 import ru.mirea.dentalclinic.domain.models.Doctor;
 import ru.mirea.dentalclinic.domain.models.Office;
 import ru.mirea.dentalclinic.domain.models.Record;
+import ru.mirea.dentalclinic.domain.models.RecordCreateModel;
 
 import java.sql.Date;
 
 public class RecordMapper {
-    public static RecordEntity mapFromDomain(@NotNull Record record) {
+    public static RecordEntity mapFromCreateModel(@NotNull RecordCreateModel record) {
         return new RecordEntity(
                 record.id(),
                 record.start(),

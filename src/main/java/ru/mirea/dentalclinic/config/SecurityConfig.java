@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/record/**").authenticated()
                         .requestMatchers("/**").permitAll()
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/record/create").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

@@ -1,9 +1,15 @@
 package ru.mirea.dentalclinic.domain.service;
 
 import ru.mirea.dentalclinic.domain.models.Record;
+import ru.mirea.dentalclinic.domain.models.RecordCreateModel;
+import ru.mirea.dentalclinic.utils.result.Result;
+
+import java.util.List;
 
 public interface RecordService {
-    Record createNewRecord(Record record);
+    Result<Record> createNewRecord(RecordCreateModel record);
 
-    Record bookRecord(Long recordId);
+    Result<Record> bookRecord(Long recordId);
+
+    Result<List<Record>> getRecordsByProcedureAndClinic(Long procedureId, Long clinicId);
 }

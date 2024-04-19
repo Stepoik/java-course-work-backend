@@ -31,4 +31,9 @@ public class ProcedureServiceImpl implements ProcedureService {
                 .map(ProcedureMapper::mapToDomain)
                 .toList();
     }
+
+    @Override
+    public Boolean isProcedureExist(Long procedureId) {
+        return procedureRepository.existsById(procedureId);
+    }
 }

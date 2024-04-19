@@ -9,4 +9,6 @@ public interface ProcedureService {
     Result<Procedure> getProcedureByName(String procedureName);
 
     List<Procedure> getProceduresByClinicId(Long clinicId);
+
+    Boolean isProcedureExist(Long procedureId);
 }
