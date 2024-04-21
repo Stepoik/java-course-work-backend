@@ -22,7 +22,7 @@ public class AuthController {
     public ResponseEntity singUp(@RequestBody @Valid UserDetailsRequest userDetailsRequest) {
         Result<String> token = authService.signUp(userDetailsRequest);
         if (token.getResultType() == Result.ResultType.FAILURE) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(token.getException().getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка");
         }
         return ResponseEntity.ok(new JwtAuthResponse(
                 token.getValue()
@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity singIn(@RequestBody @Valid UserDetailsRequest userDetailsRequest) {
         Result<String> token = authService.signIn(userDetailsRequest);
         if (token.getResultType() == Result.ResultType.FAILURE) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(token.getException().getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка");
         }
         return ResponseEntity.ok(new JwtAuthResponse(
                 token.getValue()

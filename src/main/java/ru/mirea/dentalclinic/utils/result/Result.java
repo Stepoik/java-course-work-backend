@@ -33,6 +33,10 @@ public class Result<T> {
         return Result.success(function.apply(value));
     }
 
+    public Boolean isFailure() {
+        return this.resultType == ResultType.FAILURE;
+    }
+
     public void onFailure(OnFailureListener onFailureListener) {
         if (resultType == ResultType.FAILURE) {
             onFailureListener.onFailure(this.exception);

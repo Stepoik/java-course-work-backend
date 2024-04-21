@@ -6,11 +6,13 @@ import ru.mirea.dentalclinic.data.entities.ProcedureEntity;
 import ru.mirea.dentalclinic.data.mappers.ProcedureMapper;
 import ru.mirea.dentalclinic.data.repositories.ProcedureRepository;
 import ru.mirea.dentalclinic.domain.models.Procedure;
+import ru.mirea.dentalclinic.domain.models.ProcedureWithDocCount;
 import ru.mirea.dentalclinic.domain.service.ProcedureService;
 import ru.mirea.dentalclinic.exceptions.ProcedureNotExist;
 import ru.mirea.dentalclinic.utils.result.Result;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,6 +32,21 @@ public class ProcedureServiceImpl implements ProcedureService {
         return procedures.stream()
                 .map(ProcedureMapper::mapToDomain)
                 .toList();
+    }
+
+    @Override
+    public Result<List<ProcedureWithDocCount>> getProceduresWithCount() {
+        return Result.runCatching(() -> {
+           List<Object[]> procedures = procedureRepository.getProcedures();
+           return procedures.stream().map((procedure) -> {
+               String name = ((String)procedure[0]);
+               Long count = (Long) procedure[1];
+               return new ProcedureWithDocCount(
+                       name,
+                       count.intValue()
+               );
+           }).toList();
+        });
     }
 
     @Override

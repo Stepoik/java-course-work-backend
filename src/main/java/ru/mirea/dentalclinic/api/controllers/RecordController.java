@@ -24,7 +24,7 @@ public class RecordController {
     public ResponseEntity<Object> bookRecordById(@PathVariable("id") Long id) {
         Result<Record> record = recordService.bookRecord(id);
         if (record.getResultType() == Result.ResultType.FAILURE) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(record.getException().getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse("Ошибка"));
         }
         Record recordValue = record.getValue();
         return ResponseEntity.ok().body(
@@ -37,7 +37,7 @@ public class RecordController {
         Result<Record> recordResult = recordService.createNewRecord(RecordMapper.mapToCreateModel(recordRequest));
         if (recordResult.getResultType() == Result.ResultType.FAILURE) {
             return ResponseEntity.badRequest().body(
-                    new ErrorResponse(recordResult.getException().getMessage())
+                    new ErrorResponse("Ошибка")
             );
         }
         Record record = recordResult.getValue();
@@ -54,7 +54,7 @@ public class RecordController {
         Result<List<Record>> recordsResult = recordService
                 .getRecordsByProcedureAndClinic(procedureId, clinicId);
         if (recordsResult.getResultType() == Result.ResultType.FAILURE) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(recordsResult.getException().getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse("Ошибка"));
         }
         List<RecordDto> records = recordsResult.getValue().stream()
                 .map(RecordMapper::mapFromDomain)

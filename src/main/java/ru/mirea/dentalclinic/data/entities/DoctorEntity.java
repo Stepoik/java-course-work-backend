@@ -34,15 +34,23 @@ public class DoctorEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "rate")
+    private Float rate;
+
+    @Column(name = "experience")
+    private Integer experience;
+
     @ManyToMany(mappedBy = "doctors")
     private List<ProcedureEntity> procedures;
 
-    public DoctorEntity(Long id, String firstName, String lastName, String middleName, String spec, String image) {
+    public DoctorEntity(Long id, String firstName, String lastName, String middleName, String spec, String image, Float rate, Integer experience) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.spec = spec;
         this.image = image;
+        this.rate = rate;
+        this.experience = experience;
     }
 }

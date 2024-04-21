@@ -14,7 +14,12 @@ public record DoctorDto(
         @JsonProperty("image")
         String image,
         @JsonProperty("specialization")
-        DoctorSpecializationDto doctorSpecializationDto
+        DoctorSpecializationDto doctorSpecializationDto,
+
+        @JsonProperty("rate")
+        Float rate,
+        @JsonProperty("experience")
+        Integer experience
 
 ) {
 }

@@ -14,4 +14,13 @@ public class ClinicEntityMapper {
                 clinic.getLongitude()
         );
     }
+
+    public static ClinicEntity mapFromDomain(Clinic clinic) {
+        return new ClinicEntity(
+                clinic.id(),
+                clinic.address(),
+                clinic.latitude(),
+                clinic.longitude()
+        );
+    }
 }

@@ -4,7 +4,7 @@ import ru.mirea.dentalclinic.api.dtos.ClinicDto;
 
 import java.util.List;
 
-public record ClinicResponse(
+public record ClinicsResponse(
         List<ClinicDto> clinics
 ) {
 }

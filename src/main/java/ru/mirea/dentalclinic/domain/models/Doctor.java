@@ -6,6 +6,9 @@ public record Doctor(
         String lastName,
         String middleName,
         DoctorSpecialization doctorSpec,
-        String image
+        String image,
+        Float rate,
+        Integer experience
+
 ) {
 }

@@ -1,5 +1,7 @@
 package ru.mirea.dentalclinic.data.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,6 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, Long> {
             "inner join RecordEntity r on r.doctor = d " +
             "where r.office.clinic.id = :clinicId and pr.id = :procedureId")
     List<DoctorEntity> getDoctorEntitiesByProceduresIdAndClinicId(Long procedureId, Long clinicId);
+
+    Page<DoctorEntity> findAll(Pageable pageable);
 }

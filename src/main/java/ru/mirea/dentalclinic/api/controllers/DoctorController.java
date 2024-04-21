@@ -50,6 +50,21 @@ public class DoctorController {
             doctors = Result.runCatching(() -> doctorService.getDoctorByProcedureAndClinicId(procedure, clinicId));
         }
         if (doctors.getResultType() == Result.ResultType.FAILURE) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Ошибка"));
+        }
+        return ResponseEntity.ok(new DoctorsResponse(
+                doctors.getValue().stream()
+                        .map(DoctorMapper::mapFromDomain)
+                        .toList()
+        ));
+    }
+
+    @GetMapping("/best/{page}")
+    public ResponseEntity<Object> getDoctorsWithBestRate(
+           @PathVariable("page") Integer page
+    ) {
+        Result<List<Doctor>> doctors = doctorService.getBestDoctors(page);
+        if (doctors.getResultType() == Result.ResultType.FAILURE) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(doctors.getException().getMessage()));
         }
         return ResponseEntity.ok(new DoctorsResponse(
@@ -58,6 +73,7 @@ public class DoctorController {
                         .toList()
         ));
     }
+
 
     @GetMapping("/{name}")
     public DoctorsResponse getDoctorsByName(
@@ -69,5 +85,13 @@ public class DoctorController {
                         .map(DoctorMapper::mapFromDomain)
                         .toList()
         );
+    }
+
+    @PostMapping("/create")
+    public DoctorDto createDoctor(
+            @RequestBody DoctorDto doctorDto
+    ) {
+        Result<Doctor> doctorResult = doctorService.createDoctor(DoctorMapper.mapToDomain(doctorDto));
+        return DoctorMapper.mapFromDomain(doctorResult.getValue());
     }
 }

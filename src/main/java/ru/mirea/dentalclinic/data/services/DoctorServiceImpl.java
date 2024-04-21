@@ -1,6 +1,10 @@
 package ru.mirea.dentalclinic.data.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mirea.dentalclinic.data.entities.DoctorEntity;
 import ru.mirea.dentalclinic.data.mappers.DoctorMapper;
@@ -23,6 +27,9 @@ import java.util.Optional;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final ProcedureService procedureService;
+
+    private final Integer PAGE_SIZE = 10;
+
     @Override
     public List<Doctor> getDoctors() {
         return List.of();
@@ -75,6 +82,24 @@ public class DoctorServiceImpl implements DoctorService {
                 .getDoctorEntitiesByProceduresIdAndClinicId(procedure.id(), clientId)
                 .stream().map(DoctorMapper::mapToDomain)
                 .toList();
+    }
+
+    @Override
+    public Result<Doctor> createDoctor(Doctor doctor) {
+        return Result.runCatching(() -> {
+            return DoctorMapper.mapToDomain(
+                    doctorRepository.save(DoctorMapper.mapFromDomain(doctor))
+            );
+        });
+    }
+
+    @Override
+    public Result<List<Doctor>> getBestDoctors(Integer page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("rate").descending());
+        return Result.runCatching(() -> {
+            Page<DoctorEntity> foundPage = doctorRepository.findAll(pageable);
+            return foundPage.getContent().stream().map(DoctorMapper::mapToDomain).toList();
+        });
     }
 
     private Procedure getProcedure(String procedureName) throws ProcedureNotExist {

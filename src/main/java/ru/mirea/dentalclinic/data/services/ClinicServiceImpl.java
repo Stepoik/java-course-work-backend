@@ -2,6 +2,7 @@ package ru.mirea.dentalclinic.data.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mirea.dentalclinic.data.entities.ClinicEntity;
 import ru.mirea.dentalclinic.data.entities.ProcedureEntity;
 import ru.mirea.dentalclinic.data.mappers.ClinicEntityMapper;
 import ru.mirea.dentalclinic.data.repositories.ClinicRepository;
@@ -10,6 +11,7 @@ import ru.mirea.dentalclinic.domain.models.Clinic;
 import ru.mirea.dentalclinic.domain.models.Procedure;
 import ru.mirea.dentalclinic.domain.service.ClinicService;
 import ru.mirea.dentalclinic.domain.service.ProcedureService;
+import ru.mirea.dentalclinic.utils.result.Result;
 
 import java.util.List;
 
@@ -18,7 +20,6 @@ import java.util.List;
 public class ClinicServiceImpl implements ClinicService {
     private final ClinicRepository clinicRepository;
     private final ProcedureService procedureService;
-
 
 
     @Override
@@ -48,5 +49,10 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     public List<Procedure> getProcedures(Long clinicId) {
         return procedureService.getProceduresByClinicId(clinicId);
+    }
+
+    @Override
+    public Result<Clinic> createClinic(Clinic clinic) {
+        return Result.runCatching(() -> ClinicEntityMapper.mapToDomain(clinicRepository.save(ClinicEntityMapper.mapFromDomain(clinic))));
     }
 }

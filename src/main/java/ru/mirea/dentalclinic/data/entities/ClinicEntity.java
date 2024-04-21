@@ -29,4 +29,11 @@ public class ClinicEntity {
 
     @ManyToMany(mappedBy = "clinics")
     private List<ProcedureEntity> procedures;
+
+    public ClinicEntity(Long id, String address, Float latitude, Float longitude) {
+        this.id = id;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

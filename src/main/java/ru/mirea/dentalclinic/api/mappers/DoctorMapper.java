@@ -12,7 +12,22 @@ public class DoctorMapper {
                 doctor.middleName(),
                 doctor.lastName(),
                 doctor.image(),
-                DoctorSpecializationDto.mapFromDomain(doctor.doctorSpec())
+                DoctorSpecializationDto.mapFromDomain(doctor.doctorSpec()),
+                doctor.rate(),
+                doctor.experience()
+        );
+    }
+
+    public static Doctor mapToDomain(DoctorDto doctor) {
+        return new Doctor(
+                doctor.id(),
+                doctor.firstName(),
+                doctor.lastName(),
+                doctor.middleName(),
+                doctor.doctorSpecializationDto().mapToDomain(),
+                doctor.image(),
+                doctor.rate(),
+                doctor.experience()
         );
     }
 }

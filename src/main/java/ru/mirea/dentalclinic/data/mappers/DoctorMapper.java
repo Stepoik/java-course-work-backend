@@ -12,7 +12,9 @@ public class DoctorMapper {
                 doctor.getLastName(),
                 doctor.getMiddleName(),
                 SpecializationMapper.mapToDomain(doctor.getSpec()),
-                doctor.getImage()
+                doctor.getImage(),
+                doctor.getRate(),
+                doctor.getExperience()
         );
     }
 
@@ -23,7 +25,9 @@ public class DoctorMapper {
                 doctor.lastName(),
                 doctor.middleName(),
                 doctor.doctorSpec().name(),
-                doctor.image()
+                doctor.image(),
+                doctor.rate(),
+                doctor.experience()
         );
     }
 }
