@@ -12,7 +12,7 @@ import java.util.List;
 public interface DoctorService {
     List<Doctor> getDoctors();
 
-    List<Doctor> getDoctorByName(String query);
+    List<Doctor> getDoctorByName(String query, Integer page);
 
     Doctor getDoctorById(Long id);
 

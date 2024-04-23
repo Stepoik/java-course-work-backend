@@ -61,7 +61,7 @@ public class DoctorController {
 
     @GetMapping("/best/{page}")
     public ResponseEntity<Object> getDoctorsWithBestRate(
-           @PathVariable("page") Integer page
+            @PathVariable("page") Integer page
     ) {
         Result<List<Doctor>> doctors = doctorService.getBestDoctors(page);
         if (doctors.getResultType() == Result.ResultType.FAILURE) {
@@ -75,16 +75,24 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/{name}")
+    @GetMapping("/list/{page}")
     public DoctorsResponse getDoctorsByName(
-            @PathVariable("name") String name
+            @RequestParam("name") String name,
+            @PathVariable("page") Integer page
     ) {
-        List<Doctor> doctors = doctorService.getDoctorByName(name);
+        List<Doctor> doctors = doctorService.getDoctorByName(name, page);
         return new DoctorsResponse(
                 doctors.stream()
                         .map(DoctorMapper::mapFromDomain)
                         .toList()
         );
+    }
+
+    @GetMapping("/{id}")
+    public DoctorDto getDoctorById(
+            @PathVariable("id") Long id
+    ) {
+        return DoctorMapper.mapFromDomain(doctorService.getDoctorById(id));
     }
 
     @PostMapping("/create")

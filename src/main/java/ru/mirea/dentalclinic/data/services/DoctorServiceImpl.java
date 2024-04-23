@@ -36,8 +36,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<Doctor> getDoctorByName(String query) {
-        return doctorRepository.findByFirstNameContaining(query)
+    public List<Doctor> getDoctorByName(String query, Integer page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("rate").descending());
+        return doctorRepository.findByFirstNameContaining(query, pageable)
                 .stream()
                 .map(DoctorMapper::mapToDomain)
                 .toList();

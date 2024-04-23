@@ -35,6 +35,14 @@ public class ProcedureServiceImpl implements ProcedureService {
     }
 
     @Override
+    public List<Procedure> getProceduresByDoctorId(Long doctorId) {
+        List<ProcedureEntity> procedures = procedureRepository.findByDoctorsId(doctorId);
+        return procedures.stream()
+                .map(ProcedureMapper::mapToDomain)
+                .toList();
+    }
+
+    @Override
     public Result<List<ProcedureWithDocCount>> getProceduresWithCount() {
         return Result.runCatching(() -> {
            List<Object[]> procedures = procedureRepository.getProcedures();

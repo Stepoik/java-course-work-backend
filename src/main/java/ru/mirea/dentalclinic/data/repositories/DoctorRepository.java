@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 import ru.mirea.dentalclinic.data.entities.DoctorEntity;
 
@@ -15,7 +16,8 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, Long> {
             "where d.spec = :spec and cl.id = :clinicId")
     List<DoctorEntity> getDoctorEntitiesBySpecAndClinicId(String spec, Long clinicId);
 
-    List<DoctorEntity> findByFirstNameContaining(String firstName);
+    @Query("select d from DoctorEntity d where concat(lower(d.lastName), lower(d.firstName), lower(d.middleName)) like CONCAT('%',lower(:query) ,'%') ")
+    List<DoctorEntity> findByFirstNameContaining(String query, Pageable pageable);
 
     List<DoctorEntity> getDoctorEntitiesByProceduresId(Long procedureId);
 

@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface ProcedureRepository extends JpaRepository<ProcedureEntity, Long> {
     List<ProcedureEntity> findByClinicsId(Long clinicId);
 
+    List<ProcedureEntity> findByDoctorsId(Long doctorId);
+
     Optional<ProcedureEntity> findByName(String name);
 
     @Query("select p.name, count(p) from ProcedureEntity p inner join p.doctors group by p.name")

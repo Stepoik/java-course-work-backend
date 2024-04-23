@@ -11,6 +11,8 @@ public interface ProcedureService {
 
     List<Procedure> getProceduresByClinicId(Long clinicId);
 
+    List<Procedure> getProceduresByDoctorId(Long doctorId);
+
     Result<List<ProcedureWithDocCount>> getProceduresWithCount();
 
     Boolean isProcedureExist(Long procedureId);
