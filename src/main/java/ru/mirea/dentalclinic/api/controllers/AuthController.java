@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.dentalclinic.api.dtos.reponses.JwtAuthResponse;
+import ru.mirea.dentalclinic.api.dtos.requests.RegistrationRequest;
 import ru.mirea.dentalclinic.api.dtos.requests.UserDetailsRequest;
 import ru.mirea.dentalclinic.domain.service.AuthService;
 import ru.mirea.dentalclinic.utils.result.Result;
@@ -19,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity singUp(@RequestBody @Valid UserDetailsRequest userDetailsRequest) {
+    public ResponseEntity singUp(@RequestBody @Valid RegistrationRequest userDetailsRequest) {
         Result<String> token = authService.signUp(userDetailsRequest);
         if (token.getResultType() == Result.ResultType.FAILURE) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка");

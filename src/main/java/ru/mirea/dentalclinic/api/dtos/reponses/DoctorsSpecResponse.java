@@ -7,6 +7,6 @@ import java.util.List;
 
 public record DoctorsSpecResponse(
         List<DoctorDto> doctors,
-        DoctorSpecializationDto specialization
+        String specialization
 ) {
 }

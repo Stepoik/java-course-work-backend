@@ -7,9 +7,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.mirea.dentalclinic.api.dtos.requests.RegistrationRequest;
 import ru.mirea.dentalclinic.api.dtos.requests.UserDetailsRequest;
 import ru.mirea.dentalclinic.data.entities.UserEntity;
 import ru.mirea.dentalclinic.domain.service.AuthService;
+import ru.mirea.dentalclinic.domain.service.PatientService;
 import ru.mirea.dentalclinic.domain.service.UserService;
 import ru.mirea.dentalclinic.utils.JwtService;
 import ru.mirea.dentalclinic.utils.result.Result;
@@ -22,11 +24,13 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final PatientService patientService;
     @Override
-    public Result<String> signUp(UserDetailsRequest userDetailsRequest) {
+    public Result<String> signUp(RegistrationRequest userDetailsRequest) {
         UserEntity user = UserEntity.builder()
                 .username(userDetailsRequest.username())
                 .password(passwordEncoder.encode(userDetailsRequest.password()))
+                .email(userDetailsRequest.email())
                 .role(UserEntity.Role.ROLE_USER)
                 .build();
 
@@ -34,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
         if (createdUser.getResultType() == Result.ResultType.FAILURE) {
             return Result.failure(createdUser.getException());
         }
+        patientService.createPatient(userDetailsRequest.firstName(), userDetailsRequest.lastName(), createdUser.getValue());
         String jwt = jwtService.generateToken(user);
         return Result.success(jwt);
     }

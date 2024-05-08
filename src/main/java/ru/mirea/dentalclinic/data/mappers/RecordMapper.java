@@ -15,7 +15,7 @@ public class RecordMapper {
                 record.id(),
                 record.start(),
                 record.end(),
-                (Date) record.day(),
+                new Date(record.day().getTime()),
                 record.isBooked()
         );
     }

@@ -45,11 +45,10 @@ public class SecurityConfig {
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }))
-                // Настройка доступа к конечным точкам
                 .authorizeHttpRequests(request -> request
-                        // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*").permitAll()
+                        .requestMatchers("/record/date/**").permitAll()
                         .requestMatchers("/record/**").authenticated()
                         .requestMatchers("/**").permitAll()
                         .requestMatchers("/clinic/create").hasRole("ADMIN")

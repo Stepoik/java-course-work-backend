@@ -34,7 +34,7 @@ public class DoctorController {
                 .toList();
         return new DoctorsSpecResponse(
                 doctors,
-                specialization
+                specialization.name
         );
     }
 

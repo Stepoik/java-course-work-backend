@@ -1,9 +1,9 @@
 package ru.mirea.dentalclinic.api.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mirea.dentalclinic.api.dtos.RecordDto;
 import ru.mirea.dentalclinic.api.dtos.reponses.ErrorResponse;
 import ru.mirea.dentalclinic.api.dtos.reponses.RecordsResponse;
 import ru.mirea.dentalclinic.api.dtos.requests.RecordRequest;
@@ -12,6 +12,7 @@ import ru.mirea.dentalclinic.domain.models.Record;
 import ru.mirea.dentalclinic.domain.service.RecordService;
 import ru.mirea.dentalclinic.utils.result.Result;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -46,20 +47,28 @@ public class RecordController {
                 .body(RecordMapper.mapFromDomain(record));
     }
 
-    @GetMapping("/{procedureId}/{clinicId}")
-    public ResponseEntity<Object> getRecordsByProcedureAndClinic(
-            @PathVariable("procedureId") Long procedureId,
-            @PathVariable("clinicId") Long clinicId
+    @GetMapping("/date/{date}/{doctorId}")
+    public ResponseEntity<Object> getRecordsByDate(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("date") Date date,
+            @PathVariable("doctorId") Long doctorId
     ) {
-        Result<List<Record>> recordsResult = recordService
-                .getRecordsByProcedureAndClinic(procedureId, clinicId);
-        if (recordsResult.getResultType() == Result.ResultType.FAILURE) {
+        Result<List<Record>> records = recordService.getRecordByDateAndDoctorId(date, doctorId);
+        if (records.isFailure()) {
+            System.out.println(records.getException().getMessage());
             return ResponseEntity.badRequest().body(new ErrorResponse("Ошибка"));
         }
-        List<RecordDto> records = recordsResult.getValue().stream()
-                .map(RecordMapper::mapFromDomain)
-                .toList();
-        RecordsResponse response = new RecordsResponse(records);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new RecordsResponse(records.getValue().stream().map(RecordMapper::mapFromDomain).toList()));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getRecords() {
+        Result<List<Record>> recordResult = Result.runCatching(recordService::getRecords);
+        if (recordResult.isFailure()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<Record> records = recordResult.getValue();
+        return ResponseEntity.ok(new RecordsResponse(
+                records.stream().map(RecordMapper::mapFromDomain).toList()
+        ));
     }
 }

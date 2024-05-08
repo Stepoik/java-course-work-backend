@@ -5,9 +5,14 @@ import org.springframework.stereotype.Repository;
 import ru.mirea.dentalclinic.data.entities.RecordEntity;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface RecordRepository extends JpaRepository<RecordEntity, Long> {
     Optional<RecordEntity> getRecordEntityByDateAndStartAndOfficeId(Date date, Integer start, Long officeId);
+
+    List<RecordEntity> getRecordEntitiesByDateAndDoctorIdOrderByStart(Date date, Long doctorId);
+
+    List<RecordEntity> getRecordEntitiesByPatientIdOrderByDate(Long patientId);
 }

@@ -4,6 +4,7 @@ import ru.mirea.dentalclinic.domain.models.Record;
 import ru.mirea.dentalclinic.domain.models.RecordCreateModel;
 import ru.mirea.dentalclinic.utils.result.Result;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RecordService {
@@ -11,5 +12,7 @@ public interface RecordService {
 
     Result<Record> bookRecord(Long recordId);
 
-    Result<List<Record>> getRecordsByProcedureAndClinic(Long procedureId, Long clinicId);
+    Result<List<Record>> getRecordByDateAndDoctorId(Date date, Long doctorId);
+
+    List<Record> getRecords();
 }

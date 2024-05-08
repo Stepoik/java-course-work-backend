@@ -2,18 +2,14 @@ package ru.mirea.dentalclinic.data.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mirea.dentalclinic.data.entities.DoctorEntity;
-import ru.mirea.dentalclinic.data.entities.PatientEntity;
-import ru.mirea.dentalclinic.data.entities.RecordEntity;
-import ru.mirea.dentalclinic.data.entities.UserEntity;
+import ru.mirea.dentalclinic.data.entities.*;
 import ru.mirea.dentalclinic.data.mappers.DoctorMapper;
 import ru.mirea.dentalclinic.data.mappers.RecordMapper;
+import ru.mirea.dentalclinic.data.repositories.OfficeRepository;
 import ru.mirea.dentalclinic.data.repositories.PatientRepository;
 import ru.mirea.dentalclinic.data.repositories.RecordRepository;
-import ru.mirea.dentalclinic.domain.models.Doctor;
 import ru.mirea.dentalclinic.domain.models.Record;
 import ru.mirea.dentalclinic.domain.models.RecordCreateModel;
-import ru.mirea.dentalclinic.domain.models.User;
 import ru.mirea.dentalclinic.domain.service.DoctorService;
 import ru.mirea.dentalclinic.domain.service.ProcedureService;
 import ru.mirea.dentalclinic.domain.service.RecordService;
@@ -32,13 +28,13 @@ public class RecordServiceImpl implements RecordService {
     private final DoctorService doctorService;
     private final UserService userService;
     private final PatientRepository patientRepository;
-    private final ProcedureService procedureService;
+    private final OfficeRepository officeRepository;
 
     @Override
     public Result<Record> createNewRecord(RecordCreateModel record) {
         return Result.runCatching(() -> {
             Optional<RecordEntity> foundRecord = recordRepository.getRecordEntityByDateAndStartAndOfficeId(
-                    (Date) Date.from(record.day().toInstant()),
+                    new Date(record.day().getTime()),
                     record.start(),
                     record.officeId()
             );
@@ -46,8 +42,10 @@ public class RecordServiceImpl implements RecordService {
                 throw new RecordAlreadyExits();
             }
             DoctorEntity doctor = DoctorMapper.mapFromDomain(doctorService.getDoctorById(record.doctorId()));
+            OfficeEntity office = officeRepository.findById(record.officeId()).orElseThrow();
             RecordEntity newRecord = RecordMapper.mapFromCreateModel(record);
             newRecord.setDoctor(doctor);
+            newRecord.setOffice(office);
             return RecordMapper.mapToDomain(recordRepository.save(newRecord));
         });
     }
@@ -78,12 +76,25 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Result<List<Record>> getRecordsByProcedureAndClinic(Long procedureId, Long clinicId) {
+    public Result<List<Record>> getRecordByDateAndDoctorId(java.util.Date date, Long doctorId) {
         return Result.runCatching(() -> {
-            if (procedureService.isProcedureExist(procedureId)) {
-
-            }
-            return null;
+            List<RecordEntity> doctors = recordRepository.getRecordEntitiesByDateAndDoctorIdOrderByStart(new Date(date.getTime()), doctorId);
+            return doctors.stream().map(RecordMapper::mapToDomain).toList();
         });
+    }
+
+    @Override
+    public List<Record> getRecords() {
+        Result<UserEntity> currentUserResult = userService.getCurrentUser();
+        if (currentUserResult.isFailure()) {
+            throw new RuntimeException(currentUserResult.getException());
+        }
+        UserEntity currentUser = currentUserResult.getValue();
+        Optional<PatientEntity> patient = patientRepository.getPatientEntityByUserId(currentUser.getId());
+        if (patient.isEmpty()) {
+            throw new RuntimeException();
+        }
+        List<RecordEntity> records = recordRepository.getRecordEntitiesByPatientIdOrderByDate(patient.get().getId());
+        return records.stream().map(RecordMapper::mapToDomain).toList();
     }
 }
